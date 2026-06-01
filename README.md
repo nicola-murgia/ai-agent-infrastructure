@@ -47,8 +47,7 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 |-----------|-------|--------|------|---------|
 | `ollama` | `ollama/ollama` | Running | `<PORT>` | Local LLM inference |
 | `open-webui` | `open-webui/open-webui` | Running + healthy | `<PORT>` | Web UI for LLMs |
-| `litellm` | `litellm/litellm` | Stopped | `<PORT>` | Unified LLM gateway |
-| `searxng` | `searxng/searxng` | Running | `<IP ADDRESS>:<PORT>` | Private search proxy |
+| `openclaw-searxng` | `searxng/searxng` | Running | `<IP ADDRESS>:<PORT>` | Private search proxy |
 
 ---
 
