@@ -1,10 +1,11 @@
-# VPS AI Platform: Infrastructure Overview
+# 🛡️ AI Agent Infrastructure
 
 [![Ubuntu 24.04](https://img.shields.io/badge/os-Ubuntu_24.04-blue.svg)](https://ubuntu.com/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com/)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org/)
+[![WireGuard](https://img.shields.io/badge/vpn-WireGuard-purple.svg)](https://www.wireguard.com/)
 
-Production infrastructure for autonomous AI agents: bioinformatics pipelines + sysadmin automation.
+Production infrastructure for **autonomous AI agents** — bioinformatics pipelines + infrastructure automation.
 
 ---
 
@@ -15,7 +16,7 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 | CPU | AMD EPYC-Genoa (4 vCPU) |
 | RAM | 7.6 GB |
 | Disk | 150 GB SSD (57 GB free) |
-| Network | WireGuard VPN |
+| Network | WireGuard VPN (10.7.0.0/24) |
 
 ---
 
@@ -26,7 +27,7 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 | **Goro** | Bioinformatics automation | OpenClaw | Python pipeline writing, code generation, tool orchestration |
 | **Kratos** | Infrastructure automation | Hermes | Docker, GitHub MCP, security, monitoring |
 
-**Communication:** Internal WireGuard network.
+**Communication:** Internal WireGuard network (`10.7.0.1`).
 
 ---
 
@@ -37,7 +38,7 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 | SSH | Custom port | `<PORT>` (fail2ban protected) |
 | fail2ban | Active | SSH brute-force protection |
 | UFW | Active | Filtered traffic |
-| WireGuard | Active | Internal subnet |
+| WireGuard | Active | Internal subnet (10.7.0.0/24) |
 
 ---
 
@@ -45,9 +46,12 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 
 | Container | Image | Status | Port | Purpose |
 |-----------|-------|--------|------|---------|
-| `ollama` | `ollama/ollama` | Running | `<PORT>` | Local LLM inference |
-| `open-webui` | `open-webui/open-webui` | Running + healthy | `<PORT>` | Web UI for LLMs |
-| `openclaw-searxng` | `searxng/searxng` | Running | `<IP ADDRESS>:<PORT>` | Private search proxy |
+| `ollama` | `ollama/ollama` | Running | `11434` | Local LLM inference |
+| `open-webui` | `open-webui/open-webui` | Running + healthy | `3000` | Web UI for LLMs |
+| `openclaw-searxng` | `searxng/searxng` | Running | `8082` | Private search proxy |
+| `litellm-litellm` | `litellm/litellm:main-stable` | Running | `4000` (via 10.7.0.1) | Multi-provider LLM routing |
+| `postgres` | `postgres:16-alpine` | Running | `5432` | Litellm database |
+| `manifest` | `manifestdotbuild/manifest` | Running | `3001` | Manifest platform |
 
 ---
 
@@ -55,10 +59,10 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 
 | Category | Tools |
 |----------|-------|
-| **AI/ML** | Ollama, LiteLLM, OpenWebUI |
+| **AI/ML** | Ollama, LiteLLM, OpenWebUI, OpenClaw |
 | **Bioinformatics** | Scanpy, pysradb, sra-tools, STAR, featureCounts |
-| **DevOps** | Docker, Docker Compose, WireGuard, fail2ban, UFW |
-| **Monitoring** | Custom health scripts, Telegram alerts |
+| **DevOps** | Docker, Docker Compose, WireGuard, fail2ban, UFW, NGINX |
+| **Monitoring** | Custom health scripts, Telegram alerts, Cron jobs |
 | **Code** | GitHub CLI, Git, Python 3.11 |
 
 ---
@@ -72,9 +76,11 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 
 ### Kratos (Infrastructure)
 - Docker container lifecycle (deploy, update, rollback)
-- GitHub operations (PR reviews, issues, releases)
+- GitHub operations (PR reviews, issues, releases via MCP)
 - Security auditing (SSH, ports, users, Docker)
 - Health monitoring (Telegram alerts, daily digests)
+- OpenClaw gateway management
+- Local LLM serving (Ollama, LiteLLM)
 
 ---
 
@@ -83,22 +89,38 @@ Production infrastructure for autonomous AI agents: bioinformatics pipelines + s
 - **OS:** Ubuntu 24.04.4 LTS (kernel 6.8.0-124-generic)
 - **Memory:** 1.8/7.6 GB used (33%)
 - **Disk:** 88/150 GB used (61%)
-- **Active Services:** Docker, fail2ban, UFW, ssh, nginx, Pi-hole
+- **Active Services:** Docker, fail2ban, UFW, ssh, NGINX, Pi-hole, WireGuard
 
 ---
 
 ## 📚 Skills Loading (Kratos)
 
-- `kratos-fail2ban` — SSH protection
-- `kratos-alerts` — Telegram notifications
-- `kratos-deploy` — Docker deployments
-- `kratos-docker` — Container management
-- `kratos-security` — Security auditing
-- `kratos-sysops` — System monitoring
-- `github-*` — GitHub automation
-- `vastai-gpu-offload` — GPU provisioning
-- `hermes-agent` — Agent configuration
-- `ai-gateway-configuration` — LLM gateway setup
+| Category | Skills |
+|----------|--------|
+| **DevOps** | `kratos-fail2ban`, `kratos-deploy`, `kratos-docker`, `kratos-sysops`, `kratos-alerts` |
+| **Security** | `kratos-security`, `github-code-review`, `github-pr-workflow` |
+| **GitHub** | `github-auth`, `github-repo-management`, `github-issues`, `codebase-inspection` |
+| **MLOps** | `vastai-gpu-offload`, `hermes-agent`, `ai-gateway-configuration` |
+
+---
+
+## 🔗 Services Endpoints
+
+| Service | URL | Access |
+|---------|-----|--------|
+| OpenWebUI | `http://<VPS>:3000` | Public |
+| LiteLLM Proxy | `http://10.7.0.1:4000` | WireGuard internal |
+| SearXNG | `http://127.0.0.1:8082` | Local only |
+| OpenClaw Gateway | `http://127.0.0.1:18789` | Local (token auth) |
+| Manifest | `http://<VPS>:3001` | Public |
+
+---
+
+## 📝 Notes
+
+- **No Gmail watcher** configured yet — pending OAuth setup
+- **Password restrictions** — never change auth unless explicitly requested
+- **Daily health digest** runs at 08:00 and sends to Telegram
 
 ---
 
