@@ -24,7 +24,7 @@ Production infrastructure for **autonomous AI agents** — bioinformatics pipeli
 
 | Agent | Role | Framework | Skills |
 |-------|------|-----------|--------|
-| **Goro** | Bioinformatics automation | OpenClaw | Python pipeline writing, code generation, tool orchestration |
+| **Goro** | Career strategy, data analysis & bioinformatics | OpenClaw | Job search, CV/cover letter, data pipelines (Python/R), ML, scRNA-seq, behavioral analysis, scientific writing, literature monitoring, email drafting, docx generation, humanizer |
 | **Kratos** | Infrastructure automation | Hermes | Docker, GitHub MCP, security, monitoring |
 
 **Communication:** Internal WireGuard network (`10.7.0.1`).
@@ -69,10 +69,21 @@ Production infrastructure for **autonomous AI agents** — bioinformatics pipeli
 
 ## 🚀 Automation Capabilities
 
-### Goro (Bioinformatics)
-- Python pipeline generation (scRNA-seq, alignment, counting, DE analysis)
-- Code execution via Jupyter or CLI
-- Tool orchestration (Scanpy, pysradb, sra-tools)
+### Goro (Career Strategy, Data Analysis & Bioinformatics)
+- **Job search** — SearXNG-powered daily scanning of biotech/pharma/CRO/CDMO roles across EU
+- **CV & cover letters** — Tailored DOCX generation with skill-humanizer (python-docx)
+- **Career strategy** — Fit assessment memos, interview prep, compensation benchmarks
+- **Professional emails** — Cold outreach, follow-up, rejection response templates
+- **Industry news** — CNS pipeline, CRO/CDMO moves, EU hiring trends
+- **Literature monitoring** — PubMed, bioRxiv, arXiv keyword alerts
+- **Data analysis** — Python (pandas, numpy, scipy, matplotlib, seaborn, scikit-learn) and R (tidyverse, ggplot2, lme4, emmeans)
+- **Behavioral pipelines** — DeepLabCut, SimBA, Keypoint MoSeq post-processing
+- **scRNA-seq** — Scanpy, STAR, featureCounts, pysradb
+- **ML pipelines** — PyTorch, HuggingFace, clustering, dimensionality reduction
+- **Scientific writing** — Manuscripts, grants, reports (American English, direct style)
+- **AI text humanizer** — Strip AI-isms, add voice and personality
+- **Book-to-skill** — Convert PDF/EPUB/DOCX into structured agent knowledge bases
+- **File transfer** — Auto-send any format via Telegram
 
 ### Kratos (Infrastructure)
 - Docker container lifecycle (deploy, update, rollback)
