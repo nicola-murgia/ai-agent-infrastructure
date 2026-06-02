@@ -60,7 +60,7 @@ Production infrastructure for **autonomous AI agents** — bioinformatics pipeli
 | Category | Tools |
 |----------|-------|
 | **AI/ML** | Ollama, LiteLLM, OpenWebUI, OpenClaw |
-| **Bioinformatics** | Scanpy, pysradb, sra-tools, STAR, featureCounts |
+| **Bioinformatics** |  Scanpy, pysradb, sra-tools, STAR, featureCounts, DeepLabCut, SimBA, Keypoint MoSeq, scikit-learn, PyTorch, pandas, numpy, scipy, matplotlib, seaborn, plotly, lme4, ggplot2, tidyverse, Snakemake, MLflow, python-docx, Jupyter  |
 | **DevOps** | Docker, Docker Compose, WireGuard, fail2ban, UFW, NGINX |
 | **Monitoring** | Custom health scripts, Telegram alerts, Cron jobs |
 | **Code** | GitHub CLI, Git, Python 3.11 |
@@ -69,12 +69,7 @@ Production infrastructure for **autonomous AI agents** — bioinformatics pipeli
 
 ## 🚀 Automation Capabilities
 
-### Goro (Career Strategy, Data Analysis & Bioinformatics)
-- **Job search** — SearXNG-powered daily scanning of biotech/pharma/CRO/CDMO roles across EU
-- **CV & cover letters** — Tailored DOCX generation with skill-humanizer (python-docx)
-- **Career strategy** — Fit assessment memos, interview prep, compensation benchmarks
-- **Professional emails** — Cold outreach, follow-up, rejection response templates
-- **Industry news** — CNS pipeline, CRO/CDMO moves, EU hiring trends
+### Goro (Data Analysis & Bioinformatics)
 - **Literature monitoring** — PubMed, bioRxiv, arXiv keyword alerts
 - **Data analysis** — Python (pandas, numpy, scipy, matplotlib, seaborn, scikit-learn) and R (tidyverse, ggplot2, lme4, emmeans)
 - **Behavioral pipelines** — DeepLabCut, SimBA, Keypoint MoSeq post-processing
@@ -124,14 +119,6 @@ Production infrastructure for **autonomous AI agents** — bioinformatics pipeli
 | SearXNG | `http://127.0.0.1:8082` | Local only |
 | OpenClaw Gateway | `http://127.0.0.1:18789` | Local (token auth) |
 | Manifest | `http://<VPS>:3001` | Public |
-
----
-
-## 📝 Notes
-
-- **No Gmail watcher** configured yet — pending OAuth setup
-- **Password restrictions** — never change auth unless explicitly requested
-- **Daily health digest** runs at 08:00 and sends to Telegram
 
 ---
 
