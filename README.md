@@ -3,124 +3,156 @@
 [![Ubuntu 24.04](https://img.shields.io/badge/os-Ubuntu_24.04-blue.svg)](https://ubuntu.com/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com/)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org/)
-[![WireGuard](https://img.shields.io/badge/vpn-WireGuard-purple.svg)](https://www.wireguard.com/)
+[![Ollama](https://img.shields.io/badge/ollama-local-green.svg)](https://ollama.com/)
+[![OpenClaw](https://img.shields.io/badge/agent-OpenClaw-purple.svg)](https://openclaw.ai/)
+[![Hermes](https://img.shields.io/badge/agent-Hermes-orange.svg)](https://hermes-agent.dev/)
 
-Production infrastructure for **autonomous AI agents** — bioinformatics pipelines + infrastructure automation.
+Production infrastructure for **autonomous AI agents** — dual-agent architecture combining bioinformatics analysis and infrastructure automation.
 
 ---
 
-## 🖥️ Hardware (Hetzner VPS)
+## 🏗️ Architecture
 
-| Component | Specification |
-|-----------|---------------|
-| CPU | AMD EPYC-Genoa (4 vCPU) |
-| RAM | 7.6 GB |
-| Disk | 150 GB SSD (57 GB free) |
-| Network | WireGuard VPN (10.7.0.0/24) |
+```
+┌──────────────┐     ┌──────────────┐
+│  OpenClaw    │     │   Hermes     │
+│  Gateway     │────▶│   Gateway    │
+│  (port 1)    │     │  (port 2)    │
+└──────┬───────┘     └──────┬───────┘
+       │                     │
+       ▼                     ▼
+┌──────────────┐     ┌──────────────┐
+│  Goro        │     │   Kratos     │
+│  (Agent)     │     │   (Agent)    │
+│  Data/       │     │   Infra/     │
+│  Bioinfo     │     │   Sysadmin   │
+└──────────────┘     └──────────────┘
+```
+
+Two independent agent frameworks running side by side, each serving a distinct role.
 
 ---
 
 ## 🤖 Agents
 
-| Agent | Role | Framework | Skills |
-|-------|------|-----------|--------|
-| **Goro** | Career strategy, data analysis & bioinformatics | OpenClaw | Job search, CV/cover letter, data pipelines (Python/R), ML, scRNA-seq, behavioral analysis, scientific writing, literature monitoring, email drafting, docx generation, humanizer |
-| **Kratos** | Infrastructure automation | Hermes | Docker, GitHub MCP, security, monitoring |
+| Agent | Framework | Role | Domain |
+|-------|-----------|------|--------|
+| **Goro** | OpenClaw | Data analysis, bioinformatics, career strategy | Scientific computing, bio stats, ML pipelines, job search |
+| **Kratos** | Hermes | Infrastructure automation, security, monitoring | Docker, GitHub ops, system health, LLM serving |
 
-**Communication:** Internal WireGuard network (`10.7.0.1`).
+Both agents communicate via an internal VPN and share access to the same service stack.
+
+---
+
+## 🐳 Services
+
+| Service | Purpose |
+|---------|---------|
+| **OpenWebUI** | Web interface for LLM interaction |
+| **SearXNG** | Privacy-first search aggregation |
+| **Ollama** | Local LLM inference server |
+| **Pi-hole** | Network-level ad blocking and DNS |
+| **NGINX** | Reverse proxy and TLS termination |
+| **WireGuard** | Secure VPN for internal agent communication |
+
+### Local LLM Models (Ollama)
+
+| Model | Size | Quantization |
+|-------|------|-------------|
+| gpt-oss | 20.9B | MXFP4 |
+| gemma4:e4b | 8.0B | Q4_K_M |
+| gemma4:e2b | 5.1B | Q4_K_M |
+| gemma4-12b | 11.9B | Q4_K_M |
+| llama3.1 | 8.0B | Q4_K_M |
+| mistral | 7.2B | Q4_K_M |
+| qwen2.5:7b | 7.6B | Q4_K_M |
+| qwen3.5:2b | 2.3B | Q8_0 |
+
+Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 
 ---
 
 ## 🔐 Security
 
-| Service | Status | Port |
-|---------|--------|------|
-| SSH | Custom port | `<PORT>` (fail2ban protected) |
-| fail2ban | Active | SSH brute-force protection |
-| UFW | Active | Filtered traffic |
-| WireGuard | Active | Internal subnet (10.7.0.0/24) |
+- **SSH** — Custom port, fail2ban brute-force protection
+- **Firewall** — UFW with filtered traffic rules
+- **VPN** — WireGuard for internal agent communication
+- **Monitoring** — Daily health digests via Telegram alerts
+- **Hardening** — Regular security audits, minimal attack surface
 
 ---
 
-## 🐳 Docker Services
+## 🚀 Agent Capabilities
 
-| Container | Image | Status | Port | Purpose |
-|-----------|-------|--------|------|---------|
-| `ollama` | `ollama/ollama` | Running | `11434` | Local LLM inference |
-| `open-webui` | `open-webui/open-webui` | Running + healthy | `3000` | Web UI for LLMs |
-| `openclaw-searxng` | `searxng/searxng` | Running | `8082` | Private search proxy |
-| `litellm-litellm` | `litellm/litellm:main-stable` | Running | `4000` (via 10.7.0.1) | Multi-provider LLM routing |
-| `postgres` | `postgres:16-alpine` | Running | `5432` | Litellm database |
-| `manifest` | `manifestdotbuild/manifest` | Running | `3001` | Manifest platform |
+### Goro (OpenClaw) — Data Analysis & Bioinformatics
 
----
-
-## 📦 Installed Tools
-
-| Category | Tools |
-|----------|-------|
-| **AI/ML** | Ollama, LiteLLM, OpenWebUI, OpenClaw |
-| **Bioinformatics** |  Scanpy, pysradb, sra-tools, STAR, featureCounts, DeepLabCut, SimBA, Keypoint MoSeq, scikit-learn, PyTorch, pandas, numpy, scipy, matplotlib, seaborn, plotly, lme4, ggplot2, tidyverse, Snakemake, MLflow, python-docx, Jupyter  |
-| **DevOps** | Docker, Docker Compose, WireGuard, fail2ban, UFW, NGINX |
-| **Monitoring** | Custom health scripts, Telegram alerts, Cron jobs |
-| **Code** | GitHub CLI, Git, Python 3.11 |
-
----
-
-## 🚀 Automation Capabilities
-
-### Goro (Data Analysis & Bioinformatics)
 - **Literature monitoring** — PubMed, bioRxiv, arXiv keyword alerts
-- **Data analysis** — Python (pandas, numpy, scipy, matplotlib, seaborn, scikit-learn) and R (tidyverse, ggplot2, lme4, emmeans)
-- **Behavioral pipelines** — DeepLabCut, SimBA, Keypoint MoSeq post-processing
-- **scRNA-seq** — Scanpy, STAR, featureCounts, pysradb
-- **ML pipelines** — PyTorch, HuggingFace, clustering, dimensionality reduction
+- **Data analysis** — Python (pandas, numpy, scipy, scikit-learn) and R (tidyverse, ggplot2, lme4)
+- **Bioinformatics** — Scanpy, STAR, featureCounts, pysradb, SRA tools
+- **Behavioral pipelines** — DeepLabCut, SimBA, Keypoint MoSeq
+- **Machine learning** — PyTorch, HuggingFace, clustering, dimensionality reduction
 - **Scientific writing** — Manuscripts, grants, reports (American English, direct style)
 - **AI text humanizer** — Strip AI-isms, add voice and personality
 - **Book-to-skill** — Convert PDF/EPUB/DOCX into structured agent knowledge bases
 - **File transfer** — Auto-send any format via Telegram
+- **SFT dataset generation** — BioStat Copilot, ICH/GxP compliance data, CRF/Consort diagrams
 
-### Kratos (Infrastructure)
-- Docker container lifecycle (deploy, update, rollback)
-- GitHub operations (PR reviews, issues, releases via MCP)
-- Security auditing (SSH, ports, users, Docker)
-- Health monitoring (Telegram alerts, daily digests)
-- OpenClaw gateway management
-- Local LLM serving (Ollama, LiteLLM)
+### Kratos (Hermes) — Infrastructure Automation
+
+- **Docker lifecycle** — Deploy, update, rollback containers
+- **GitHub operations** — PR reviews, issues, releases via MCP
+- **Security auditing** — SSH, ports, users, Docker
+- **Health monitoring** — Telegram alerts, daily digests
+- **Gateway management** — OpenClaw and Hermes gateways
+- **Local LLM serving** — Ollama management, model serving
+- **Cron orchestration** — Scheduled jobs, health checks, automation
+- **Engraphis memory** — Persistent cross-session knowledge graph
+
+---
+
+## 🛠️ Installed Tooling
+
+| Category | Tools |
+|----------|-------|
+| **AI/ML** | Ollama, OpenWebUI, OpenClaw, Hermes, LiteLLM |
+| **Bioinformatics** | Scanpy, pysradb, SRA tools, STAR, featureCounts, DeepLabCut, SimBA, Keypoint MoSeq |
+| **Data Science** | scikit-learn, PyTorch, pandas, numpy, scipy, matplotlib, seaborn, plotly |
+| **R Stats** | lme4, ggplot2, tidyverse, Snakemake |
+| **DevOps** | Docker, Docker Compose, WireGuard, fail2ban, UFW, NGINX |
+| **Monitoring** | Custom health scripts, Telegram alerts, cron |
+| **Code** | GitHub CLI, Git, Python 3.11, Node.js |
+
+---
+
+## 📚 Agent Skills
+
+### Kratos Skills
+| Category | Skills |
+|----------|--------|
+| **DevOps** | System operations, Docker management, web server operations, LLM web stack |
+| **Security** | Security auditing, code review, PR workflow |
+| **GitHub** | Auth, repo management, issues, codebase inspection |
+| **MLOps** | GPU offload, local LLM inference, hardware procurement |
+| **AI** | Hermes agent management, webhook subscriptions |
+
+### Goro Skills
+| Category | Skills |
+|----------|--------|
+| **Data Science** | Jupyter, data analysis, visualization |
+| **Bioinformatics** | scRNA-seq pipelines, behavioral analysis, literature monitoring |
+| **Writing** | Scientific writing, CV/cover letters, humanizer |
+| **Research** | PubMed, arXiv, bioRxiv monitoring |
 
 ---
 
 ## ⚙️ System Status
 
-- **OS:** Ubuntu 24.04.4 LTS (kernel 6.8.0-124-generic)
-- **Memory:** 1.8/7.6 GB used (33%)
-- **Disk:** 88/150 GB used (61%)
-- **Active Services:** Docker, fail2ban, UFW, ssh, NGINX, Pi-hole, WireGuard
+- **OS:** Ubuntu 24.04 LTS
+- **Active Services:** Docker, fail2ban, UFW, SSH, NGINX, Pi-hole, WireGuard
+- **Docker Containers:** OpenWebUI, SearXNG
+- **Agent Frameworks:** OpenClaw Gateway, Hermes Gateway, Engraphis MCP
 
 ---
 
-## 📚 Skills Loading (Kratos)
-
-| Category | Skills |
-|----------|--------|
-| **DevOps** | `kratos-fail2ban`, `kratos-deploy`, `kratos-docker`, `kratos-sysops`, `kratos-alerts` |
-| **Security** | `kratos-security`, `github-code-review`, `github-pr-workflow` |
-| **GitHub** | `github-auth`, `github-repo-management`, `github-issues`, `codebase-inspection` |
-| **MLOps** | `vastai-gpu-offload`, `hermes-agent`, `ai-gateway-configuration` |
-
----
-
-## 🔗 Services Endpoints
-
-| Service | URL | Access |
-|---------|-----|--------|
-| OpenWebUI | `http://<VPS>:3000` | Public |
-| LiteLLM Proxy | `http://10.7.0.1:4000` | WireGuard internal |
-| SearXNG | `http://127.0.0.1:8082` | Local only |
-| OpenClaw Gateway | `http://127.0.0.1:18789` | Local (token auth) |
-| Manifest | `http://<VPS>:3001` | Public |
-
----
-
-**Repository:** https://github.com/nicola-murgia/ai-agent-infrastructure  
+**Repository:** https://github.com/nicola-murgia/ai-agent-infrastructure
 **Owner:** Nicola Murgia
