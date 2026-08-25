@@ -3,7 +3,7 @@
 [![Ubuntu 24.04](https://img.shields.io/badge/os-Ubuntu_24.04-blue.svg)](https://ubuntu.com/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com/)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org/)
-[![Ollama](https://img.shields.io/badge/ollama-local-green.svg)](https://ollama.com/)
+[![Ollama](https://img.shields.io/badge/ollama-cloud-green.svg)](https://ollama.com/)
 [![OpenClaw](https://img.shields.io/badge/agent-OpenClaw-purple.svg)](https://openclaw.ai/)
 [![Hermes](https://img.shields.io/badge/agent-Hermes-orange.svg)](https://hermes-agent.dev/)
 
@@ -17,7 +17,7 @@ Production infrastructure for **autonomous AI agents** — dual-agent architectu
 ┌──────────────┐     ┌──────────────┐
 │  OpenClaw    │     │   Hermes     │
 │  Gateway     │────▶│   Gateway    │
-│  (port 1)    │     │  (port 2)    │
+│  (port 18789)│     │  (managed)   │
 └──────┬───────┘     └──────┬───────┘
        │                     │
        ▼                     ▼
@@ -46,16 +46,16 @@ Both agents communicate via an internal VPN and share access to the same service
 
 ## 🐳 Services
 
-| Service | Purpose |
-|---------|---------|
-| **OpenWebUI** | Web interface for LLM interaction |
-| **SearXNG** | Privacy-first search aggregation |
-| **Ollama** | Local LLM inference server |
-| **Pi-hole** | Network-level ad blocking and DNS |
-| **NGINX** | Reverse proxy and TLS termination |
-| **WireGuard** | Secure VPN for internal agent communication |
+| Service | Purpose | Status |
+|---------|---------|--------|
+| **OpenWebUI** | Web interface for LLM interaction | ✅ Running (port 3000) |
+| **SearXNG** | Privacy-first search aggregation | ✅ Running (port 8082) |
+| **Pi-hole** | Network-level ad blocking and DNS | ✅ Running (port 53, 8443) |
+| **NGINX** | Reverse proxy and TLS termination | ✅ Running (port 80, 443) |
+| **WireGuard** | Secure VPN for internal agent communication | ✅ Running (wg0) |
+| **Ollama** | LLM inference (cloud-backed) | ☁️ Cloud proxy |
 
-### Local LLM Models (Ollama)
+### Local LLM Models (via Ollama Cloud)
 
 | Model | Size | Quantization |
 |-------|------|-------------|
@@ -76,7 +76,7 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 
 - **SSH** — Custom port, fail2ban brute-force protection
 - **Firewall** — UFW with filtered traffic rules
-- **VPN** — WireGuard for internal agent communication
+- **VPN** — WireGuard for internal agent communication (wg0 active)
 - **Monitoring** — Daily health digests via Telegram alerts
 - **Hardening** — Regular security audits, minimal attack surface
 
@@ -104,7 +104,7 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 - **Security auditing** — SSH, ports, users, Docker
 - **Health monitoring** — Telegram alerts, daily digests
 - **Gateway management** — OpenClaw and Hermes gateways
-- **Local LLM serving** — Ollama management, model serving
+- **LLM serving** — Ollama Cloud proxy, model routing
 - **Cron orchestration** — Scheduled jobs, health checks, automation
 - **Engraphis memory** — Persistent cross-session knowledge graph
 
@@ -114,7 +114,7 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 
 | Category | Tools |
 |----------|-------|
-| **AI/ML** | Ollama, OpenWebUI, OpenClaw, Hermes, LiteLLM |
+| **AI/ML** | Ollama (cloud), OpenWebUI, OpenClaw, Hermes, Engraphis MCP |
 | **Bioinformatics** | Scanpy, pysradb, SRA tools, STAR, featureCounts, DeepLabCut, SimBA, Keypoint MoSeq |
 | **Data Science** | scikit-learn, PyTorch, pandas, numpy, scipy, matplotlib, seaborn, plotly |
 | **R Stats** | lme4, ggplot2, tidyverse, Snakemake |
@@ -127,6 +127,7 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 ## 📚 Agent Skills
 
 ### Kratos Skills
+
 | Category | Skills |
 |----------|--------|
 | **DevOps** | System operations, Docker management, web server operations, LLM web stack |
@@ -136,6 +137,7 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 | **AI** | Hermes agent management, webhook subscriptions |
 
 ### Goro Skills
+
 | Category | Skills |
 |----------|--------|
 | **Data Science** | Jupyter, data analysis, visualization |
@@ -151,6 +153,7 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 - **Active Services:** Docker, fail2ban, UFW, SSH, NGINX, Pi-hole, WireGuard
 - **Docker Containers:** OpenWebUI, SearXNG
 - **Agent Frameworks:** OpenClaw Gateway, Hermes Gateway, Engraphis MCP
+- **LLM Backend:** Ollama Cloud (no local Ollama container)
 
 ---
 
