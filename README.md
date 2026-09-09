@@ -3,11 +3,11 @@
 [![Ubuntu 24.04](https://img.shields.io/badge/os-Ubuntu_24.04-blue.svg)](https://ubuntu.com/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)](https://docker.com/)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org/)
-[![Ollama](https://img.shields.io/badge/ollama-cloud-green.svg)](https://ollama.com/)
+[![Ollama Cloud](https://img.shields.io/badge/ollama-cloud-green.svg)](https://ollama.com/)
 [![OpenClaw](https://img.shields.io/badge/agent-OpenClaw-purple.svg)](https://openclaw.ai/)
 [![Hermes](https://img.shields.io/badge/agent-Hermes-orange.svg)](https://hermes-agent.dev/)
 
-Production infrastructure for **autonomous AI agents** — dual-agent architecture combining bioinformatics analysis and infrastructure automation.
+Production infrastructure for **autonomous AI agents** — dual-agent architecture combining infrastructure automation, security, and monitoring.
 
 ---
 
@@ -22,10 +22,10 @@ Production infrastructure for **autonomous AI agents** — dual-agent architectu
        │                     │
        ▼                     ▼
 ┌──────────────┐     ┌──────────────┐
-│  Goro        │     │   Kratos     │
+│  OpenClaw    │     │   Kratos     │
 │  (Agent)     │     │   (Agent)    │
-│  Data/       │     │   Infra/     │
-│  Bioinfo     │     │   Sysadmin   │
+│  Web/        │     │   Infra/     │
+│  Automation  │     │   Sysadmin   │
 └──────────────┘     └──────────────┘
 ```
 
@@ -37,7 +37,7 @@ Two independent agent frameworks running side by side, each serving a distinct r
 
 | Agent | Framework | Role | Domain |
 |-------|-----------|------|--------|
-| **Goro** | OpenClaw | Data analysis, bioinformatics, career strategy | Scientific computing, bio stats, ML pipelines, job search |
+| **OpenClaw** | OpenClaw | Web automation, notebook execution, agent orchestration | Browser control, code execution, workflow automation |
 | **Kratos** | Hermes | Infrastructure automation, security, monitoring | Docker, GitHub ops, system health, LLM serving |
 
 Both agents communicate via an internal VPN and share access to the same service stack.
@@ -53,60 +53,56 @@ Both agents communicate via an internal VPN and share access to the same service
 | **Pi-hole** | Network-level ad blocking and DNS | ✅ Running (port 53, 8443) |
 | **NGINX** | Reverse proxy and TLS termination | ✅ Running (port 80, 443) |
 | **WireGuard** | Secure VPN for internal agent communication | ✅ Running (wg0) |
-| **Ollama** | LLM inference (cloud-backed) | ☁️ Cloud proxy |
+| **Engraphis Dashboard** | Memory/knowledge graph UI | ✅ Running (port 8700) |
+| **Ollama Cloud** | LLM inference backend | ☁️ Cloud proxy |
+| **OpenClaw Gateway** | Agent gateway | ✅ Running (port 18789) |
+| **Hermes Gateway** | Agent gateway | ✅ Running (managed) |
 
-### Local LLM Models (via Ollama Cloud)
+### Listening Ports
 
-| Model | Size | Quantization |
-|-------|------|-------------|
-| gpt-oss | 20.9B | MXFP4 |
-| gemma4:e4b | 8.0B | Q4_K_M |
-| gemma4:e2b | 5.1B | Q4_K_M |
-| gemma4-12b | 11.9B | Q4_K_M |
-| llama3.1 | 8.0B | Q4_K_M |
-| mistral | 7.2B | Q4_K_M |
-| qwen2.5:7b | 7.6B | Q4_K_M |
-| qwen3.5:2b | 2.3B | Q8_0 |
-
-Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
+| Port | Service |
+|------|---------|
+| 53 | Pi-hole FTL |
+| 80 | NGINX |
+| 443 | NGINX |
+| 3000 | Docker proxy (OpenWebUI) |
+| 8082 | Docker proxy (SearXNG) |
+| 8700 | Engraphis Dashboard |
+| 18789 | OpenClaw Gateway |
+| 54322 | SSH |
 
 ---
 
 ## 🔐 Security
 
-- **SSH** — Custom port, fail2ban brute-force protection
+- **SSH** — Custom port (54322), fail2ban brute-force protection
 - **Firewall** — UFW with filtered traffic rules
 - **VPN** — WireGuard for internal agent communication (wg0 active)
-- **Monitoring** — Daily health digests via Telegram alerts
+- **Monitoring** — Daily health digests via Telegram, RAM watchdog
 - **Hardening** — Regular security audits, minimal attack surface
 
 ---
 
 ## 🚀 Agent Capabilities
 
-### Goro (OpenClaw) — Data Analysis & Bioinformatics
+### OpenClaw — Web Automation & Orchestration
 
-- **Literature monitoring** — PubMed, bioRxiv, arXiv keyword alerts
-- **Data analysis** — Python (pandas, numpy, scipy, scikit-learn) and R (tidyverse, ggplot2, lme4)
-- **Bioinformatics** — Scanpy, STAR, featureCounts, pysradb, SRA tools
-- **Behavioral pipelines** — DeepLabCut, SimBA, Keypoint MoSeq
-- **Machine learning** — PyTorch, HuggingFace, clustering, dimensionality reduction
-- **Scientific writing** — Manuscripts, grants, reports (American English, direct style)
-- **AI text humanizer** — Strip AI-isms, add voice and personality
-- **Book-to-skill** — Convert PDF/EPUB/DOCX into structured agent knowledge bases
-- **File transfer** — Auto-send any format via Telegram
-- **SFT dataset generation** — BioStat Copilot, ICH/GxP compliance data, CRF/Consort diagrams
+- **Browser automation** — Navigate, click, snapshot, vision analysis
+- **Code execution** — Run Python/bash in isolated sessions
+- **Notebook operations** — Edit, run, manage Jupyter-style workflows
+- **GitHub integration** — PR reviews, issues, releases via MCP
+- **Cron orchestration** — Scheduled jobs, health checks, automation
+- **File management** — Read, write, patch, search across filesystem
 
 ### Kratos (Hermes) — Infrastructure Automation
 
 - **Docker lifecycle** — Deploy, update, rollback containers
-- **GitHub operations** — PR reviews, issues, releases via MCP
-- **Security auditing** — SSH, ports, users, Docker
-- **Health monitoring** — Telegram alerts, daily digests
+- **Security auditing** — SSH, ports, users, Docker, fail2ban
+- **Health monitoring** — Telegram alerts, daily digests, RAM watchdog
 - **Gateway management** — OpenClaw and Hermes gateways
 - **LLM serving** — Ollama Cloud proxy, model routing
-- **Cron orchestration** — Scheduled jobs, health checks, automation
 - **Engraphis memory** — Persistent cross-session knowledge graph
+- **GitHub operations** — Auth, repo management, issues, code review
 
 ---
 
@@ -114,13 +110,12 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 
 | Category | Tools |
 |----------|-------|
-| **AI/ML** | Ollama (cloud), OpenWebUI, OpenClaw, Hermes, Engraphis MCP |
-| **Bioinformatics** | Scanpy, pysradb, SRA tools, STAR, featureCounts, DeepLabCut, SimBA, Keypoint MoSeq |
-| **Data Science** | scikit-learn, PyTorch, pandas, numpy, scipy, matplotlib, seaborn, plotly |
-| **R Stats** | lme4, ggplot2, tidyverse, Snakemake |
+| **AI/ML** | Ollama Cloud, OpenWebUI, OpenClaw, Hermes, Engraphis MCP |
+| **Data Science** | Python 3.11, pandas, numpy, scipy, scikit-learn, PyTorch |
 | **DevOps** | Docker, Docker Compose, WireGuard, fail2ban, UFW, NGINX |
-| **Monitoring** | Custom health scripts, Telegram alerts, cron |
-| **Code** | GitHub CLI, Git, Python 3.11, Node.js |
+| **Monitoring** | Custom health scripts, Telegram alerts, cron, RAM watchdog |
+| **Code** | GitHub CLI, Git, Node.js |
+| **Search** | SearXNG (privacy-first aggregation) |
 
 ---
 
@@ -136,24 +131,34 @@ Plus cloud-proxied models: DeepSeek V4 Pro, GLM-5.2, Kimi K2.7 Code.
 | **MLOps** | GPU offload, local LLM inference, hardware procurement |
 | **AI** | Hermes agent management, webhook subscriptions |
 
-### Goro Skills
+### OpenClaw Skills
 
 | Category | Skills |
 |----------|--------|
-| **Data Science** | Jupyter, data analysis, visualization |
-| **Bioinformatics** | scRNA-seq pipelines, behavioral analysis, literature monitoring |
-| **Writing** | Scientific writing, CV/cover letters, humanizer |
-| **Research** | PubMed, arXiv, bioRxiv monitoring |
+| **Automation** | Browser control, code execution, notebook operations |
+| **Orchestration** | Cron jobs, task delegation, multi-agent workflows |
+| **GitHub** | PR management, code review, issue tracking |
 
 ---
 
 ## ⚙️ System Status
 
 - **OS:** Ubuntu 24.04 LTS
-- **Active Services:** Docker, fail2ban, UFW, SSH, NGINX, Pi-hole, WireGuard
+- **Active Services:** Docker, fail2ban, UFW, SSH, NGINX, Pi-hole, WireGuard, OpenClaw Gateway, Hermes Gateway, Engraphis Dashboard
 - **Docker Containers:** OpenWebUI, SearXNG
 - **Agent Frameworks:** OpenClaw Gateway, Hermes Gateway, Engraphis MCP
-- **LLM Backend:** Ollama Cloud (no local Ollama container)
+- **LLM Backend:** Ollama Cloud (no local inference container)
+- **Daily Health Digest:** Automated Telegram delivery at 08:00 daily
+
+---
+
+## 📊 Recent Optimizations
+
+- **Health digest format** — Clean, plain-label layout with service-name mapping for firewall and listening ports
+- **RAM watchdog** — 30-minute interval memory monitoring via cron
+- **Cron consolidation** — `no_agent=true` for script-only jobs, eliminating LLM rate-limit failures
+- **Port hygiene** — Removed stale UFW rules for orphaned ports (11434, 8899)
+- **GitHub auth** — Rotated PAT with minimal required scopes (`read:org`, `repo`, `workflow`)
 
 ---
 
