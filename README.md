@@ -19,8 +19,8 @@ Production infrastructure for **autonomous AI agents** — dual-agent architectu
 │  Gateway     │────▶│   Gateway    │
 │  (port 18789)│     │  (managed)   │
 └──────┬───────┘     └──────┬───────┘
-       │                     │
-       ▼                     ▼
+       │                    │
+       ▼                    ▼
 ┌──────────────┐     ┌──────────────┐
 │  OpenClaw    │     │   Kratos     │
 │  (Agent)     │     │   (Agent)    │
